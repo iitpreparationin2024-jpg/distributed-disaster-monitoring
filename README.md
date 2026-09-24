@@ -54,7 +54,7 @@ The Raspberry Pi gateway performs local validation, event processing, warning de
 
 # 3. Core Workflow
 
-```text
+
 SENSE
   ↓
 LOCAL SENSOR CHECK
@@ -72,6 +72,7 @@ LOCAL WARNING
 DISASTER FLOW ANALYSIS
   ↓
 CENTRAL DASHBOARD / STORE-AND-FORWARD
+
 # 4. Cooperative 2-of-3 Verification
 
 The system uses nearby sensor nodes to verify abnormal events.
@@ -82,7 +83,7 @@ The system uses a **2-of-3 cooperative verification approach** before treating a
 
 ## Example
 
-```text
+
 Node A → Abnormal
 Node B → Abnormal
 Node C → Normal
@@ -94,6 +95,8 @@ Node C → Normal
         ↓
 
 CONFIRMED EVENT
+
+
 #5. Distributed System Architecture
 ┌──────────────────────────────────────────┐
 │             ESP32 SENSOR NODES           │
@@ -172,7 +175,7 @@ Central dashboard
 Event monitoring
 Disaster-flow visualization
 
-6. Emergency Communication
+#6. Emergency Communication
 
 Emergency traffic is prioritized over normal telemetry.
 
@@ -213,7 +216,7 @@ Neighbor Verification
 Edge Gateway
         ↓
 Local Warning
-7. Internet-Outage Operation
+#7. Internet-Outage Operation
 
 The central server is not the emergency path.
 
@@ -251,7 +254,7 @@ STORED DATA SYNCHRONIZED
 
 This behaviour will be validated through simulation and later hardware testing.
 
-8. Disaster Flow Analysis
+#8. Disaster Flow Analysis
 
 The system is intended to estimate disaster propagation using information such as:
 
@@ -291,7 +294,7 @@ The system can use the activation sequence and timestamps to analyze the apparen
 
 These capabilities require testing and validation before real-world use.
 
-9. Node and Event States
+#9. Node and Event States
 
 Possible node/event states include:
 
@@ -321,7 +324,7 @@ PROPAGATING — Event appears to be moving toward another zone
 AFFECTED — Zone is currently affected
 PASSED / RECOVERING — Event has moved away or conditions are recovering
 UNKNOWN — Reliable monitoring information is unavailable
-10. Fault Tolerance
+#10. Fault Tolerance
 
 The system is designed to detect, isolate, and tolerate failures such as:
 
@@ -347,7 +350,7 @@ Gateway issue	Local buffering and future redundancy
 
 The project will include dedicated failure simulations and tests.
 
-11. Warning System
+#11. Warning System
 
 The warning engine is planned around the following states:
 
@@ -387,7 +390,7 @@ CENTRAL DASHBOARD
 
 Actual hardware alerting will be validated during prototype development.
 
-12. Dashboard
+#12. Dashboard
 
 The planned dashboard will provide several monitoring views.
 
@@ -416,7 +419,7 @@ Communication failures
 Internet connectivity
 Gateway status
 Stored unsynchronized events
-13. Simulation and Demonstration
+#13. Simulation and Demonstration
 
 The project will include software simulations for:
 
@@ -458,7 +461,7 @@ DATA SYNCHRONIZATION
 
 Any simulated or conceptual demonstration will be clearly identified as a simulation and will not be presented as a physical prototype.
 
-14. Planned Hardware Prototype
+#14. Planned Hardware Prototype
 
 Initial prototype plan:
 
@@ -490,32 +493,37 @@ The physical multi-node prototype is currently planned and has not yet been full
 
 No physical deployment results are claimed at this stage.
 
-15. Technology Stack
-Hardware
+#15. Technology Stack
+
+Hardware:
 ESP32
 Raspberry Pi
 Environmental sensors
 Optional GPS / location module
 Optional cellular / LTE modem
 Local warning device
-Communication
+
+Communication:
 ESP-MESH
 MQTT / HTTP
 Wi-Fi
 Optional cellular communication
-Programming
+
+Programming:
 C / C++
 Python
 Data Storage
 Local database
 Central database
 Store-and-forward event storage
-Dashboard
+
+Dashboard:
 Web-based dashboard
 Network monitoring
 Event monitoring
 Disaster-flow visualization
-Data and Analysis
+
+Data and Analysis:
 Sensor data processing
 Cooperative verification
 Multi-sensor data fusion
