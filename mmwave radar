@@ -1,0 +1,23 @@
+                                                                                      Layer -3
+                                                                                    mmwave radar
+
+The Problem: 
+Even with heat spikes (Layer 1) and physical movement (Layer 2), there is still a slight chance of a false positive (e.g., a hot day + a deer running past the radar). Before dispatching an expensive drone, human operators usually want eyes on the target.
+
+The Solution: We use Edge AI Computer Vision.
+
+In production, this would be a rugged NVIDIA Jetson processing thermal/RGB video in the forest.
+
+When the Radar detects movement, it wakes up the camera. The camera captures a frame and runs an AI model to visually verify the specific hazard (smoke, fire, or fleeing wildlife).
+
+If the AI is confident, the chain of evidence is complete (Heat + Motion + Visual), and the drone is dispatched.
+
+2. How will it be implemented? (Hardware & Software)
+Hackathon Hardware: Your laptop's built-in webcam.
+Hackathon Software: Python, OpenCV (to access the webcam), and the Google Gemini 1.5 Flash API (acting as the ultra-fast vision model).
+
+Why Gemini instead of YOLOv8?
+Training a custom YOLOv8 model for a 5-day hackathon is time-consuming and buggy. By using Google's Gemini API via AI Studio, you can pass the webcam frame directly to the LLM and ask: "Is there a fire hazard or a red cup in this image?" It works perfectly with zero training and scores massive points for using GenAI.
+
+3. The Python Code Implementation
+This script subscribes to the MQTT broker. It waits for the Radar to publish MOTION_CONFIRMED. When that happens, it snaps a photo from your webcam, sends it to Gemini AI for verification, and publishes the final HAZARD_VERIFIED payload.
