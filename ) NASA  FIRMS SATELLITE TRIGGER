@@ -18,3 +18,26 @@ Our backend script continuously monitors the NASA API for that specific box.
 If a thermal hotspot appears inside our box, the script broadcasts a WAKE_UP command over the MQTT network.
 
 The sleeping physical ground sensors (Layer 1 ESP32s) receive this command, wake up, and begin checking if the space-based threat is actually hitting the ground.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Implementation:
+Define the Geofence (Bounding Box)
+
+You need to define the area your HELIOS system is "protecting." The FIRMS API allows you to query an area using a bounding box format: [West, South, East, North].
+
+Example: To monitor a zone near Bengaluru, you define the coordinates of a square over that region.
+
+ The Python Polling Script
+
+You will write a Python script using the requests library.
+
+The script sends an HTTP GET request to NASA FIRMS (e.g., every 15 minutes in production, but for the hackathon, you can poll faster or trigger manually).
+
+It reads the CSV response. If a row exists with a high confidence score (e.g., > 70%), it flags an anomaly.
+
+The MQTT Trigger:
+
+If the anomaly is flagged, the Python script uses the paho-mqtt library to connect to your local MQTT broker (like Eclipse Mosquitto or HiveMQ).
+
+It publishes a JSON payload to a specific topic (e.g., helios/zoneA/commands).
+
+Payload Example: {"command": "WAKE_UP", "source": "NASA_FIRMS", "confidence": 85, "lat": 12.85, "lon": 77.58}
