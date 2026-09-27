@@ -1,0 +1,20 @@
+                                                                  LAYER 1:
+
+                                                         NASA  FIRMS SATELLITE TRIGGER
+
+The Problem: 
+            The biggest enemy of IoT environmental monitoring is battery drain. If ground sensors (ESP32s) are constantly polling for temperature, smoke, and motion 24/7, they will die in a few days.
+
+
+The Solution: 
+             HELIOS shifts the initial burden of detection into space. NASA's FIRMS (Fire Information for Resource Management System) provides free, near real-time data from VIIRS and MODIS satellites, which scan the earth for massive thermal anomalies (wildfires, industrial explosions).
+
+The Action:
+
+We draw a virtual "geofence" (a bounding box of GPS coordinates) around our target area (e.g., a forest zone).
+
+Our backend script continuously monitors the NASA API for that specific box.
+
+If a thermal hotspot appears inside our box, the script broadcasts a WAKE_UP command over the MQTT network.
+
+The sleeping physical ground sensors (Layer 1 ESP32s) receive this command, wake up, and begin checking if the space-based threat is actually hitting the ground.
