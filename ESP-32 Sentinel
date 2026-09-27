@@ -1,0 +1,27 @@
+                                                                          Layer 2
+                                                                      ESP-32 Sentinel
+The Problem: 
+Satellites (Layer 0) are great at detecting massive fires or heat signatures, but their resolution is poor (often 1 pixel = 1 square kilometer). Furthermore, satellites can be blocked by heavy clouds, and sometimes false positive heat reflections occur. We cannot launch a drone based solely on a satellite ping.
+
+The Solution: 
+The ESP-32 Sentinels act as the Ground Truth. They are scattered throughout the hazard zone.
+
+They spend almost their entire life asleep, preserving battery for years.
+
+When Layer 0 (NASA) yells "WAKE UP" via MQTT, the ESP-32s wake up instantly and turn on their local sensors.
+
+If the sensors detect extreme heat or light flashes, they confirm that the macro-threat seen from space is actually happening in the forest at exact GPS coordinates.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Implementation:
+The Implementation Flow:
+
+The ESP32 connects to the local Wi-Fi (acting as the stand-in for a production LoRaWAN network).
+
+It connects to the MQTT broker (e.g., Mosquitto running on your laptop or HiveMQ public broker).
+
+It subscribes to the topic helios/zoneA/commands.
+
+The "Hack" for the Demo: True Deep Sleep on an ESP32 shuts down the Wi-Fi modem, meaning it cannot receive MQTT messages. 
+For a real production build, you use a hardware interrupt pin connected to a separate ultra-low-power LoRa receiver. 
+For the 5-day hackathon demo, you will just program the ESP32 to sit in an idle delay() loop where it doesn't read the sensors until it receives the MQTT message.
+This simulates the power-saving workflow perfectly for the judges.
