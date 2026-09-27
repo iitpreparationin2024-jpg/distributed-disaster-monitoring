@@ -1,0 +1,34 @@
+                                                                            Layer 5
+                                                                        fusion engine
+
+The Problem: 
+The most significant flaw in traditional environmental monitoring is the "Single Point of Failure." If a single smoke sensor breaks, or a single camera glitches, it triggers a false alarm. Dispatching a drone or a fire truck based on a single sensor wastes thousands of dollars.
+
+The Solution: 
+The Sensor Fusion Engine. It acts as a central cognitive brain that refuses to panic. It utilizes a Deterministic Logic Matrix (a weighted scoring system) to build a chain of evidence.
+
+The Action:
+
+It listens to all incoming telemetry via the MQTT broker.
+
+It assigns a specific point value to different types of evidence (Space, Heat, Motion, Biology).
+
+It dynamically updates the system's State Machine (DORMANT → PRE-ALERT → WATCH → INVESTIGATE → CRITICAL).
+
+Only when the Threat Score breaches 100 points does it authorize the automated UAV dispatch.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Implementation:
+Hardware:a centralized Raspberry Pi acting as the local server.
+Software: A Python backend script using the paho-mqtt library.
+
+The Weighted Scoring Matrix:
+
+NASA Satellite Anomaly (WAKE_UP) = +20 Points
+
+ESP32 Local Temp Spike (ANOMALY_CONFIRMED) = +30 Points
+
+mmWave Radar Movement (MOTION_CONFIRMED) = +30 Points
+
+YOLOv8 Biological/Visual Anomaly (CRITICAL_HAZARD_VERIFIED) = +40 Points
+
+(Total possible score = 120. Threshold to deploy UAV = 100).
