@@ -1,0 +1,28 @@
+                                                                                  Layer 4
+                                                                              webcam +yolov8
+The Problem: 
+Heat sensors and radar can confirm a physical event, but relying entirely on abiotic (non-living) sensors can still leave room for doubt.The Solution: Animals react to environmental disasters long before standard sensors cross critical thresholds. HELIOS incorporates a Wildlife Indicator. By monitoring local fauna, a sudden mass exodus, unusual clustering, or complete absence of wildlife acts as a highly reliable, independent biological signal that something is wrong.
+
+The Action:
+
+To preserve power, this camera node stays completely offline.
+
+Once Layer 2 (Radar) detects sustained physical disturbance, it wakes up the Layer 3 camera.
+
+The Edge AI runs a lightweight YOLOv8 object detection model.
+
+It scans the frame specifically for Biological Anomalies (e.g., an abnormal count of animals in the frame, simulating fleeing wildlife) alongside visual hazard confirmation.
+
+If the biological anomaly is verified, it publishes the final HAZARD_VERIFIED payload to dispatch the UAV.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Implementation:
+Hackathon Software:
+
+Python & OpenCV: To control the webcam and handle image frames.
+
+YOLOv8 (Ultralytics): An ultra-fast, state-of-the-art object detection model.
+
+The Hackathon Trick: Training a custom model for "wildlife fleeing" takes weeks. Instead, we use the pre-trained YOLOv8 Nano (yolov8n.pt) model, which is trained on the COCO dataset. It natively recognizes animals like bird, cat, dog, horse, sheep, and cow. We will write a logic rule: If the camera detects multiple animals suddenly appearing (simulating a fleeing herd) after a radar trigger, confirm the hazard.
+
+3. The Python Code Implementation
+This script subscribes to the MQTT broker. Upon receiving the MOTION_CONFIRMED trigger from the Radar, it turns on the webcam, runs YOLOv8, counts the biological subjects, and triggers the drone if an anomaly is detected.
