@@ -1,0 +1,25 @@
+These are the easiest to integrate live because they offer open JSON/CSV endpoints or simple API keys.
+
+NASA FIRMS (Wildfires & Thermal Anomalies)
+
+Link: https://firms.modaps.eosdis.nasa.gov/api/
+
+Format: CSV via REST API
+
+USGS (Earthquakes)
+
+Link: https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+
+Format: Open GeoJSON (No key required)
+
+OpenWeatherMap (Severe Weather, Floods, Cyclones)
+
+Link: https://openweathermap.org/api/one-call-3#alerts
+
+Format: JSON (Requires free API key)
+
+GDACS - Global Disaster Alert System (Multi-Hazard)
+
+Link: https://www.gdacs.org/xml/
+
+Format: GeoJSON and RSS XML (Covers quakes, tsunamis, floods, cyclones)
