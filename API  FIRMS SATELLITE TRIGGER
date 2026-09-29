@@ -1,0 +1,78 @@
+LAYER 1: MULTI-API SATELLITE & CLOUD TRIGGER
+The Problem:
+The biggest enemy of IoT environmental monitoring is battery drain. If ground sensors (ESP32s) are constantly polling for temperature, smoke, water levels, and motion 24/7, their power reserves will deplete in days.
+
+The Solution:
+HELIOS shifts the initial burden of detection into space and global cloud infrastructure. Instead of relying on one data source, Layer 1 aggregates intelligence from multiple early-warning APIs to cover a comprehensive spectrum of disasters—all without waking the physical ground network until a threat is imminent.
+
+NASA FIRMS (VIIRS/MODIS): Detects massive thermal anomalies (wildfires, industrial explosions, gas flares).
+
+OpenWeatherMap / NOAA API: Tracks severe weather patterns, torrential rain thresholds, and atmospheric pressure drops (floods, cyclones).
+
+USGS Earthquake API: Monitors real-time seismic anomalies (earthquakes, potential tsunami triggers).
+
+The Action:
+
+We establish a virtual "geofence" (bounding box or radius) around our target zones.
+
+A centralized backend script continuously polls this multi-API stack for our specific coordinates.
+
+If any API crosses a critical threat threshold inside our zone, the script broadcasts a contextual WAKE_UP command over the MQTT network.
+
+The sleeping ground sensors (Layer 1 ESP32s) receive this command, wake up, and activate only the specific sensors relevant to the threat (e.g., booting water-level sensors for a flood warning, or particulate sensors for a fire).
+
+Implementation
+1. Define the Threat Perimeters
+You need to define the geographical parameters for each API:
+
+NASA FIRMS: Requires a bounding box [West, South, East, North].
+
+OpenWeatherMap / USGS: Requires a specific Latitude, Longitude, and a search Radius (in km).
+
+2. The Python Aggregator Script
+You will write a Python script using the requests library (and optionally asyncio for simultaneous polling) to monitor the APIs.
+
+FIRMS: Parses the CSV response. If a row exists with a thermal confidence score > 70%, it flags a Fire anomaly.
+
+Weather: Parses the JSON response for the alerts array or rainfall intensity exceeding safe mm/hr thresholds, flagging a Storm/Flood anomaly.
+
+USGS: Parses the GeoJSON feed for magnitudes > 4.5 within your coordinate radius, flagging a Seismic anomaly.
+
+3. The Contextual MQTT Trigger
+If any anomaly is flagged, the Python script uses the paho-mqtt library to connect to your local MQTT broker (Mosquitto/HiveMQ). It publishes a dynamic JSON payload to the regional topic (e.g., helios/zoneA/commands).
+
+Because we now use multiple APIs, the payload must include a "threat_type" so the ESP32 knows exactly which hardware sensors to power on.
+
+Payload Examples:
+
+Fire Trigger (from NASA):
+
+JSON
+{
+  "command": "WAKE_UP",
+  "threat_type": "FIRE",
+  "source": "NASA_FIRMS",
+  "confidence": 85,
+  "lat": 12.85,
+  "lon": 77.58
+}
+Flood/Storm Trigger (from Weather API):
+
+JSON
+{
+  "command": "WAKE_UP",
+  "threat_type": "FLOOD",
+  "source": "OPENWEATHER",
+  "severity": "EXTREME_RAIN",
+  "precipitation_mm": 55.2
+}
+Seismic Trigger (from USGS):
+
+JSON
+{
+  "command": "WAKE_UP",
+  "threat_type": "EARTHQUAKE",
+  "source": "USGS",
+  "magnitude": 5.2,
+  "depth_km": 10.5
+}
